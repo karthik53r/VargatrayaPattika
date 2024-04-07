@@ -4,10 +4,9 @@ const cors = require('cors');
 const userRouter = require("./routes/user");
 require('dotenv').config()
 const app = express();
-const router=express.Router();
 app.use(cors());
 app.use(express.json());
-router.get('/',(req,res)=>{
+app.get('/',(req,res)=>{
     res.json("Welcome To VargatriaPattika Api! :D");
 });
 app.use("/users", userRouter)
