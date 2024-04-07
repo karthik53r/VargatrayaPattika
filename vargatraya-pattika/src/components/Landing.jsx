@@ -19,7 +19,7 @@ const Landing = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('https://vargatraya-pattika-server-bjnmdduic-karthiks-projects-ed3af7e3.vercel.app/users');
+                const response = await axios.get('https://vargatraya-pattika.vercel.app/users');
                 setNewData(response.data.users);
                 setOriginalData(response.data.users);
                 setLoading(false);
@@ -37,7 +37,7 @@ const Landing = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('https://vargatraya-pattika-server-bjnmdduic-karthiks-projects-ed3af7e3.vercel.app/users/adduser', {
+            const response = await axios.post('https://vargatraya-pattika.vercel.app/users/adduser', {
                 name: name,
                 number: number,
                 address: address

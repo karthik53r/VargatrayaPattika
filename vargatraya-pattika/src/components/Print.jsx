@@ -14,7 +14,7 @@ const Print = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get(`https://vargatraya-pattika-server-bjnmdduic-karthiks-projects-ed3af7e3.vercel.app/users/getuser/${userid}`);
+                const response = await axios.get(`https://vargatraya-pattika.vercel.app/users/getuser/${userid}`);
                 setUser(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);

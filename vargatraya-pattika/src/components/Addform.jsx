@@ -19,7 +19,7 @@ const Addform = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get(`https://vargatraya-pattika-server-bjnmdduic-karthiks-projects-ed3af7e3.vercel.app/users/getuser/${userid}`);
+                const response = await axios.get(`https://vargatraya-pattika.vercel.app/users/getuser/${userid}`);
                 setUser(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -45,7 +45,7 @@ const Addform = () => {
             data.push(rowData);
         });
         try {
-            const res = await axios.put(`https://vargatraya-pattika-server-bjnmdduic-karthiks-projects-ed3af7e3.vercel.app/users/addform/${userid}`, {
+            const res = await axios.put(`https://vargatraya-pattika.vercel.app/users/addform/${userid}`, {
                 data: data
             });
             console.log(res.data);
