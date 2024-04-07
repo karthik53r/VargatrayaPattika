@@ -4,7 +4,11 @@ const cors = require('cors');
 const userRouter = require("./routes/user");
 require('dotenv').config()
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin:["https://vargatraya-pattika-frontend.vercel.app/"],
+    methods:["POST","GET","PUT"],
+    credentials:true
+}));
 app.use(express.json());
 app.get('/',(req,res)=>{
     res.json("Welcome To VargatriaPattika Api! :D");
