@@ -5,7 +5,7 @@ const userRouter = require("./routes/user");
 require('dotenv').config()
 const app = express();
 app.use(cors({
-    origin:["https://vargatraya-pattika-frontend.vercel.app/"],
+    origin:["https://vargatraya-pattika-frontend.vercel.app"],
     methods:["POST","GET","PUT"],
     credentials:true
 }));
