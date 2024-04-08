@@ -9,7 +9,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ConfirmationModal from './ConfirmationModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const Addform = () => {
     const [showModal, setShowModal] = useState(false);
@@ -73,7 +73,10 @@ const Addform = () => {
             }
         }
     };
-
+    const deleteRow = (index) => {
+        setRowCount(rowCount - 1);
+        setRowData(prevData => prevData.filter((_, i) => i !== index));
+    };
     const handleSelectChange = (event, rowIndex, dropdownIndex) => {
         const updatedData = [...rowData];
         const updatedValue = updatedData[rowIndex][dropdownIndex].split(' ').slice(0, -1).join(' ') + ' ' + event.target.value;
@@ -182,6 +185,7 @@ const Addform = () => {
                             ))}
                         </Select>
                         <FontAwesomeIcon icon={faPlus} style={{ color: '#9e9e9e', cursor: 'pointer' }}  onClick={() => addRow(rowIndex)} />
+                        <FontAwesomeIcon icon={faMinus} style={{color: "#9e9e9e",cursor:'pointer'}} onClick={()=> deleteRow(rowIndex)}/>
                     </div>
                 ))}
 
