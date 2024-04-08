@@ -181,7 +181,7 @@ const Addform = () => {
                                 <MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>
                             ))}
                         </Select>
-                        <FontAwesomeIcon icon={faPlus} style={{ color: '#9e9e9e' }} onClick={() => addRow(rowIndex)} />
+                        <FontAwesomeIcon icon={faPlus} style={{ color: '#9e9e9e', cursor: 'pointer' }}  onClick={() => addRow(rowIndex)} />
                     </div>
                 ))}
 
