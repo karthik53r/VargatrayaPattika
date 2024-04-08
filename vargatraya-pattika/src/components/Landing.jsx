@@ -53,7 +53,9 @@ const Landing = () => {
             alert(`Error adding user: ${error.response.data.message}`);
         }
     };
-
+    const handleEditDetails = (userid) => {
+        navigate(`/addform/${userid}`);
+    }
     const handleViewDetails = (userid) => {
         navigate(`/print/${userid}`);
     }
@@ -126,46 +128,55 @@ const Landing = () => {
                 </div>
             ) : (
                 // Your existing JSX
-            <div className="bg-white rounded-md border border-gray-300 p-4 mt-4 flex flex-row items-center justify-between">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead>
-                        <tr>
-                            <th className="px-6 py-3 bg-gray-200 text-left text-lg font-semibold text-gray-800 uppercase tracking-wider rounded-l-lg">#</th>
-                            <th className="px-6 py-3 bg-gray-200 text-left text-lg font-semibold text-gray-800 uppercase tracking-wider">యజమాని పేరు</th>
-                            <th className="px-6 py-3 bg-gray-200 text-left text-lg font-semibold text-gray-800 uppercase tracking-wider">ఫోన్ నెంబర్</th>
-                            <th className="px-6 py-3 bg-gray-200 text-left text-lg font-semibold text-gray-800 uppercase tracking-wider uppercase tracking-wider">అడ్రస్</th>
-                            <th className="px-6 py-3 bg-gray-200 rounded-r-lg"></th>
-                        </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                        {newData.map((data, index) => (
-                            <tr key={index}>
-                                <td className="px-6 py-4 whitespace-nowrap text-lg">{index + 1}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-lg">{data.name}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-lg">{data.number}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-lg">{data.address}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-lg">
-                                    {data.data.length !== 0 ? (
-                                        <button
-                                            className="bg-blue-400 text-white px-4 py-2 rounded-md mr-2 hover:bg-blue-600"
-                                            onClick={() => handleViewDetails(data._id)}
-                                        >
-                                            View Details
-                                        </button>
-                                    ) : (
-                                        <button
-                                            className="bg-orange-400 text-white px-4 py-2 rounded-md mr-2 hover:bg-orange-600"
-                                            onClick={() => handleFillDetails(data)}
-                                        >
-                                            Fill Details
-                                        </button>
-                                    )}
-                                </td>
+                <div className="bg-white rounded-md border border-gray-300 p-4 mt-4 flex flex-row items-center justify-between">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th className="px-6 py-3 bg-gray-200 text-left text-lg font-semibold text-gray-800 uppercase tracking-wider rounded-l-lg">#</th>
+                                <th className="px-6 py-3 bg-gray-200 text-left text-lg font-semibold text-gray-800 uppercase tracking-wider">యజమాని పేరు</th>
+                                <th className="px-6 py-3 bg-gray-200 text-left text-lg font-semibold text-gray-800 uppercase tracking-wider">ఫోన్ నెంబర్</th>
+                                <th className="px-6 py-3 bg-gray-200 text-left text-lg font-semibold text-gray-800 uppercase tracking-wider uppercase tracking-wider">అడ్రస్</th>
+                                <th className="px-6 py-3 bg-gray-200 rounded-r-lg"></th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {newData.map((data, index) => (
+                                <tr key={index}>
+                                    <td className="px-6 py-4 whitespace-nowrap text-lg">{index + 1}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-lg">{data.name}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-lg">{data.number}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-lg">{data.address}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-lg">
+                                        {data.data.length !== 0 ? (
+                                            <>
+                                                <button
+                                                    className="bg-blue-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-blue-600"
+                                                    onClick={() => handleViewDetails(data._id)}
+                                                >
+                                                    View
+                                                </button>
+                                                <button
+                                                    className="bg-red-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-red-600"
+                                                    onClick={() => handleEditDetails(data._id)}
+                                                >
+                                                    Edit
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <button
+                                                className="bg-orange-400 text-white px-3 py-1 rounded-md mr-2 hover:bg-orange-600"
+                                                onClick={() => handleFillDetails(data)}
+                                            >
+                                                Fill Details
+                                            </button>
+                                        )}
+
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
             <div>
                 {

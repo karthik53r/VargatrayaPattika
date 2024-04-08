@@ -56,25 +56,27 @@ const Print = () => {
                         <table className="w-full table-auto bg-white border border-gray-200 rounded-lg">
                             <thead className="bg-gray-100">
                                 <tr>
-                                    <th className="px-4 p border-b border-gray-200" style={{ width: "50px" }}>Sl.No</th>
-                                    <th className="px-4 py-2 border-b border-gray-200">వర్గ త్రయం</th>
-                                    <th className="px-4 py-2 border-b border-gray-200">గోత్రం</th>
+                                    <th className="px-1 py-2 border-b border-gray-200 w-0">Sl.No</th>
+                                    <th className="px-4 py-2 border-b border-gray-200 ">వర్గ త్రయం</th>
+                                    <th className="px-4 py-2 border-b border-gray-200 ">గోత్రం</th>
                                     <th className="px-4 py-2 border-b border-gray-200">పేరు</th>
-                                    <th className="px-4 py-2 border-b border-gray-200">రూపం</th>
+                                    <th className="px-2 py-2 border-b border-gray-200">రూపం</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {user.data && user.data.map((item, index) => (
-                                    <tr key={index} >
-                                        <td className="px-4 py-2 border-b border-gray-200">{index + 1}</td>
+                                    <tr key={index}>
+                                        <td className="px-1 py-2 border-b border-gray-200 w-0">{index + 1}</td>
                                         <td className="px-4 py-2 border-b border-gray-200">{item.vargatrayam}</td>
-                                        <td className="px-4 py-2 border-b border-gray-200">{item.gothram}</td>
+                                        <td className="px-4 py-2 border-b border-gray-200 ">{item.gothram}</td>
                                         <td className="px-4 py-2 border-b border-gray-200">{item.name}</td>
-                                        <td className="px-4 py-2 border-b border-gray-200">{item.rupam}</td>
+                                        <td className="px-2 py-2 border-b border-gray-200">{item.rupam}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
+
+
                     </div>
                     <div className="flex justify-center pt-4">
                         <button className="bg-gray-500 hover:bg-gray-700 text-white text-sm font-semibold py-2 px-4 rounded" onClick={() => navigate('/home')}>

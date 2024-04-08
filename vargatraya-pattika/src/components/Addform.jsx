@@ -8,45 +8,48 @@ import { dd1, dd2, dd3, dd4 } from './dds';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ConfirmationModal from './ConfirmationModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 const Addform = () => {
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
     const { userid } = useParams();
     const [rowCount, setRowCount] = useState(1);
     const [user, setUser] = useState({});
-    const [selectedValues, setSelectedValues] = useState([['d', 'd', 'd', 'd']]);
-    const [textFieldsData, setTextFieldsData] = useState([{ gothram: '', name: '' }]);
+    const [rowData, setRowData] = useState([{ vargatrayam: 'd', gothram: '  d', name: '  d', rupam: 'd' }]);
+
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const response = await axios.get(`https://vargatraya-pattika.vercel.app/users/getuser/${userid}`);
                 setUser(response.data);
+                console.log(response.data.data.length);
+                if (response.data.data.length >= 1) {
+                    setRowData(response.data.data);
+                    setRowCount(response.data.data.length);
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
         fetchUser();
     }, []);
-    const addRow = () => {
+
+    const addRow = (index) => {
         setRowCount(rowCount + 1);
-        setSelectedValues([...selectedValues, ['d', 'd', 'd', 'd']]);
-        setTextFieldsData([...textFieldsData, { gothram: '', name: '' }]);
+        setRowData(prevData => [
+            ...prevData.slice(0, index + 1),
+            { vargatrayam: 'd', gothram: '  d', name: '  d', rupam: 'd' },
+            ...prevData.slice(index + 1)
+        ]);
     };
-    console.log(user);
+
     const OnSubmit = async () => {
         setShowModal(false);
-        const data = [];
-        selectedValues.forEach((row, index) => {
-            const rowData = {};
-            rowData.vargatrayam = selectedValues[index][0];
-            rowData.gothram = textFieldsData[index].gothram + " " + selectedValues[index][1];
-            rowData.name = textFieldsData[index].name + " " + selectedValues[index][2];
-            rowData.rupam = selectedValues[index][3];
-            data.push(rowData);
-        });
         try {
             const res = await axios.put(`https://vargatraya-pattika.vercel.app/users/addform/${userid}`, {
-                data: data
+                data: rowData
             });
             console.log(res.data);
         } catch (error) {
@@ -55,48 +58,40 @@ const Addform = () => {
         navigate(`/print/${userid}`);
     };
 
-    const handleNameKeyPress = async (e,rowIndex,fieldName)=>{
-        if (e.key === ' ' && textFieldsData[rowIndex].name.trim() !== '') {
+    const handleKeyPress = async (e, rowIndex, fieldName) => {
+        if (e.key === ' ' && rowData[rowIndex][fieldName].trim() !== '') {
             try {
                 const response = await axios.get(
-                    `https://inputtools.google.com/request?text=${textFieldsData[rowIndex].name}&itc=te-t-i0-und&num=1&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage`
+                    `https://inputtools.google.com/request?text=${rowData[rowIndex][fieldName].split(' ').slice(0, -1).join(' ')}&itc=te-t-i0-und&num=1&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage`
                 );
-                const firstTeluguWord =
-                    response.data[1][0][1].length > 0 ? response.data[1][0][1][0] : '';
-                const updatedData = [...textFieldsData];
-                updatedData[rowIndex][fieldName] = firstTeluguWord+" ";
-                setTextFieldsData(updatedData);
+                const firstTeluguWord = response.data[1][0][1].length > 0 ? response.data[1][0][1][0] : '';
+                const updatedData = [...rowData];
+                updatedData[rowIndex][fieldName] = firstTeluguWord + ' ' + ' ' + rowData[rowIndex][fieldName].split(' ').slice(-1);
+                setRowData(updatedData);
             } catch (error) {
                 console.error('Error fetching Telugu word:', error);
             }
         }
     };
-    const handleGothramKeyPress = async (e, rowIndex, fieldName) => {
-        if (e.key === ' ' && textFieldsData[rowIndex].gothram.trim() !== '') {
-            try {
-                const response = await axios.get(
-                    `https://inputtools.google.com/request?text=${textFieldsData[rowIndex].gothram}&itc=te-t-i0-und&num=1&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage`
-                );
-                const firstTeluguWord =
-                    response.data[1][0][1].length > 0 ? response.data[1][0][1][0] : '';
-                const updatedData = [...textFieldsData];
-                updatedData[rowIndex][fieldName] = firstTeluguWord+" ";
-                setTextFieldsData(updatedData);
-            } catch (error) {
-                console.error('Error fetching Telugu word:', error);
-            }
-        }
-    };
+
     const handleSelectChange = (event, rowIndex, dropdownIndex) => {
-        const updatedValues = [...selectedValues];
-        updatedValues[rowIndex][dropdownIndex] = event.target.value;
-        setSelectedValues(updatedValues);
+        const updatedData = [...rowData];
+        const updatedValue = updatedData[rowIndex][dropdownIndex].split(' ').slice(0, -1).join(' ') + ' ' + event.target.value;
+        console.log(dropdownIndex);
+        if (dropdownIndex === 'vargatrayam' || dropdownIndex === 'rupam') { 
+            updatedData[rowIndex][dropdownIndex] = event.target.value; 
+        }
+        else { 
+            updatedData[rowIndex][dropdownIndex] = updatedValue; 
+        }
+        setRowData(updatedData);
     };
 
     const handleTextFieldChange = (event, rowIndex, fieldName) => {
-        const updatedData = [...textFieldsData];
-        updatedData[rowIndex][fieldName] = event.target.value;
-        setTextFieldsData(updatedData);
+        const updatedData = [...rowData];
+        const updatedValue = event.target.value + ' ' + updatedData[rowIndex][fieldName].split('').slice(-1);
+        updatedData[rowIndex][fieldName] = updatedValue;
+        setRowData(updatedData);
     };
 
     return (
@@ -131,8 +126,8 @@ const Addform = () => {
                     <div key={rowIndex} className="w-full flex items-center justify-between gap-4 mb-4">
                         <span>{rowIndex + 1}</span>
                         <Select
-                            value={selectedValues[rowIndex][0]}
-                            onChange={(event) => handleSelectChange(event, rowIndex, 0)}
+                            value={rowData[rowIndex].vargatrayam}
+                            onChange={(event) => handleSelectChange(event, rowIndex, 'vargatrayam')}
                             className="w-1/6"
                         >
                             <MenuItem value='d'>Select One</MenuItem>
@@ -144,13 +139,13 @@ const Addform = () => {
                             label="గోత్రం"
                             variant="outlined"
                             className="w-1/6"
-                            value={textFieldsData[rowIndex].gothram}
-                            onKeyPress={(e) => handleGothramKeyPress(e, rowIndex, 'gothram')}
+                            value={rowData[rowIndex].gothram.split(' ').slice(0, -1).join(' ')}
+                            onKeyPress={(e) => handleKeyPress(e, rowIndex, 'gothram')}
                             onChange={(event) => handleTextFieldChange(event, rowIndex, 'gothram')}
                         />
                         <Select
-                            value={selectedValues[rowIndex][1]}
-                            onChange={(event) => handleSelectChange(event, rowIndex, 1)}
+                            value={rowData[rowIndex].gothram.split(' ').slice(-1)}
+                            onChange={(event) => handleSelectChange(event, rowIndex, 'gothram')}
                             className="w-1/6"
                         >
                             <MenuItem value='d'>Select One</MenuItem>
@@ -162,13 +157,13 @@ const Addform = () => {
                             label="పేరు"
                             variant="outlined"
                             className="w-1/6"
-                            value={textFieldsData[rowIndex].name}
-                            onKeyPress={(e) => handleNameKeyPress(e, rowIndex, 'name')}
+                            value={rowData[rowIndex].name.split(' ').slice(0, -1).join(' ')}
+                            onKeyPress={(e) => handleKeyPress(e, rowIndex, 'name')}
                             onChange={(event) => handleTextFieldChange(event, rowIndex, 'name')}
                         />
                         <Select
-                            value={selectedValues[rowIndex][2]}
-                            onChange={(event) => handleSelectChange(event, rowIndex, 2)}
+                            value={rowData[rowIndex].name.split(' ').slice(-1)}
+                            onChange={(event) => handleSelectChange(event, rowIndex, 'name')}
                             className="w-1/6"
                         >
                             <MenuItem value='d'>Select One</MenuItem>
@@ -177,21 +172,21 @@ const Addform = () => {
                             ))}
                         </Select>
                         <Select
-                            value={selectedValues[rowIndex][3]}
-                            onChange={(event) => handleSelectChange(event, rowIndex, 3)}
+                            value={rowData[rowIndex].rupam}
+                            onChange={(event) => handleSelectChange(event, rowIndex, 'rupam')}
                             className="w-1/6"
                         >
-                            <MenuItem value='d'>Select One</MenuItem>
+                            <MenuItem value={rowData[rowIndex].rupam}>Select One</MenuItem>
                             {dd4.map(item => (
                                 <MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>
                             ))}
                         </Select>
+                        <FontAwesomeIcon icon={faPlus} style={{ color: '#9e9e9e' }} onClick={() => addRow(rowIndex)} />
                     </div>
                 ))}
 
-
                 <div className="mt-4 flex justify-center">
-                    <Button variant="contained" onClick={addRow} style={{ backgroundColor: '#4caf50', color: 'white', marginRight: '8px' }}>
+                    <Button variant="contained" onClick={() => addRow(rowCount)} style={{ backgroundColor: '#4caf50', color: 'white', marginRight: '8px' }}>
                         Add Row
                     </Button>
                     <Button variant="contained" onClick={() => setShowModal(true)} style={{ backgroundColor: '#f44336', color: 'white' }}>
